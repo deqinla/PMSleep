@@ -201,16 +201,5 @@ class Transformer(nn.Module):
         x = self.mix(x).squeeze(2)
         return x
 
-class Prompt_encode(nn.Module):
-    def __init__(self, d_model):
-        super(Prompt_encode, self).__init__()
-        self.mix = nn.Sequential(
-                    nn.BatchNorm1d(3), nn.Conv1d(3, (d_model//2) *3, 1, 1, 0, groups=3), nn.GELU(),
-                    ModernTCNBlock(3, d_model//2, 3, 1),nn.Dropout(0.2),
-                    nn.Conv1d((d_model//2) *3,d_model,1,1,0),  nn.BatchNorm1d(d_model),nn.GELU(),
-                    nn.Linear(30, 1)
-                )
-    def forward(self, x):
-        x = x[:,:3,:]
-        return self.mix(x).transpose(1,2)
+
 
